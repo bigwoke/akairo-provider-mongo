@@ -56,7 +56,8 @@ class MongoDBProvider extends Provider {
    * @returns {Promise}
    */
   set (id, key, value) {
-    const data = this.items.get(id) || {};
+    if (!this.items.has(id)) this.items.set(id, { _id: id });
+    const data = this.items.get(id);
     data[key] = value;
     this.items.set(id, data);
 
