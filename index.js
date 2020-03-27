@@ -52,18 +52,23 @@ class MongoDBProvider extends Provider {
    * Sets a value for a specified entry.
    * @param {string} id - Entry to set the value for.
    * @param {string} key - The key to set.
-   * @param {string} value - The value to set.
+   * @param {string | Object} value - The value to set.
    * @returns {Promise}
    */
   set (id, key, value) {
     if (!this.items.has(id)) this.items.set(id, { _id: id });
     const data = this.items.get(id);
-    data[key] = value;
-    this.items.set(id, data);
 
+    if (typeof value !== 'string') value = { ...data[key], ...value };
+    data[key] = value;
+
+    this.items.set(id, data);
     return this.settings.updateOne(
       { _id: id },
-      { $set: { _id: id, [key]: value } },
+      {
+        $setOnInsert: { _id: id },
+        $set: { [key]: value }
+      },
       { upsert: true }
     );
   }
