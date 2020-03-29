@@ -65,10 +65,7 @@ class MongoDBProvider extends Provider {
     this.items.set(id, data);
     return this.settings.updateOne(
       { _id: id },
-      {
-        $setOnInsert: { _id: id },
-        $set: { [key]: value }
-      },
+      { $set: { [key]: value } },
       { upsert: true }
     );
   }
