@@ -23,10 +23,8 @@ class MongoDBProvider extends Provider {
    * Builds data cache collection from database.
    * @returns {Collection} - Settings cache.
    */
-  async init () {
-    const data = await this.settings.find();
-
-    data.forEach(doc => {
+  init () {
+    this.settings.find().forEach(doc => {
       this.items.set(doc._id, doc);
     });
 
