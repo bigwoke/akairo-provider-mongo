@@ -42,7 +42,7 @@ class MongoDBProvider extends Provider {
   get (id, key, defaultValue) {
     if (this.items.has(id)) {
       const value = this.items.get(id)[key];
-      return value === null ? defaultValue : value;
+      return value ? value : defaultValue;
     }
 
     return defaultValue;
