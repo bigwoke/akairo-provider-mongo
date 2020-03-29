@@ -39,12 +39,10 @@ class MongoDBProvider extends Provider {
    * @returns {any}
    */
   get (id, key, defaultValue) {
-    if (this.items.has(id)) {
-      const value = this.items.get(id)[key];
-      return value ? value : defaultValue;
-    }
-
-    return defaultValue;
+    return this.items.has(id)
+      ? this.items.get(id)[key] ||
+        defaultValue
+      : defaultValue;
   }
 
   /**
