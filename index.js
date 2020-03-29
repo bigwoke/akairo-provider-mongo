@@ -64,7 +64,7 @@ class MongoDBProvider extends Provider {
     doc[key] = value;
 
     this.items.set(id, doc);
-    return this.settings.updateOne(
+    return this.settings.findOneAndUpdate(
       { _id: id },
       { $set: { [key]: value } },
       { upsert: true }
@@ -84,7 +84,7 @@ class MongoDBProvider extends Provider {
     if (!data) throw new Error('No entry in items collection for given ID.');
     delete data[key];
 
-    return this.settings.updateOne({ _id: id }, { $unset: { [key]: '' } });
+    return this.settings.findOneAndUpdate({ _id: id }, { $unset: { [key]: null } });
   }
 
   /**
