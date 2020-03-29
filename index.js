@@ -1,4 +1,5 @@
 const { Provider } = require('discord-akairo');
+const merge = require('merge').recursive;
 
 /**
  * A provider for the discord-akairo framework using the `mongodb` node driver.
@@ -56,18 +57,20 @@ class MongoDBProvider extends Provider {
    * @returns {Promise}
    */
   set (id, key, value) {
-    if (!this.items.has(id)) this.items.set(id, { _id: id });
-    const data = this.items.get(id);
+    const doc = this.items.get(id) || {};
 
-    if (typeof value !== 'string') value = { ...data[key], ...value };
-    data[key] = value;
+    // Deep merge existing and new value objects before update.
+    if (doc[key] && typeof value !== 'string') value = merge(doc[key], value);
+    doc[key] = value;
 
-    this.items.set(id, data);
+    this.items.set(id, doc);
     return this.settings.updateOne(
       { _id: id },
       { $set: { [key]: value } },
       { upsert: true }
-    );
+    ).catch(err => {
+      throw err;
+    });
   }
 
   /**
