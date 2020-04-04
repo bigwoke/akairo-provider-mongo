@@ -28,7 +28,7 @@ class MongoDBProvider extends Provider {
       this.items.set(doc._id, doc);
     });
 
-    return this.items;
+    return this;
   }
 
   /**
