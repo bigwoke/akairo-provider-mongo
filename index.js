@@ -56,7 +56,7 @@ class MongoDBProvider extends Provider {
     const doc = this.items.get(id) || {};
 
     // Deep merge existing and new value objects before update.
-    if (doc[key] && typeof value !== 'string') value = merge(doc[key], value);
+    if (doc[key] && value.constructor === Object) value = merge(doc[key], value);
     doc[key] = value;
 
     this.items.set(id, doc);
