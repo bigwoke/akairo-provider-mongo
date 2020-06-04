@@ -21,7 +21,7 @@ class MongoDBProvider extends Provider {
 
   /**
    * Builds data cache collection from database.
-   * @returns {Collection} - Settings cache.
+   * @returns {MongoDBProvider} - Settings provider.
    */
   init () {
     this.settings.find().forEach(doc => {
